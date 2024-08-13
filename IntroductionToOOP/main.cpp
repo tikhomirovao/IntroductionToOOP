@@ -1,4 +1,4 @@
-#include<iostream>
+п»ї#include<iostream>
 using namespace std;
 
 class Point
@@ -56,6 +56,14 @@ public:
 	}
 };
 
+double distance(Point A, Point B)
+{
+	double x_distance = A.get_x() - B.get_x();
+	double y_distance = A.get_y() - B.get_y();
+	double distance = sqrt(x_distance * x_distance + y_distance * y_distance);
+	return distance;
+}
+
 //#define STRUCT_POINT
 //#define CONSTRUCTORS_CHECK
 
@@ -63,10 +71,10 @@ void main()
 {
 	setlocale(LC_ALL, "");
 #ifdef STRUCT_POINT
-	int a;			//объявление переменной 'a' типа 'int'
-	Point A;		//обявление переменной 'A' типа 'Point'
-	//создание объекта 'A' типа 'Point'
-	//создание экземпляра 'A' структуры 'Point'
+	int a;			//РѕР±СЉСЏРІР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ 'a' С‚РёРїР° 'int'
+	Point A;		//РѕР±СЏРІР»РµРЅРёРµ РїРµСЂРµРјРµРЅРЅРѕР№ 'A' С‚РёРїР° 'Point'
+	//СЃРѕР·РґР°РЅРёРµ РѕР±СЉРµРєС‚Р° 'A' С‚РёРїР° 'Point'
+	//СЃРѕР·РґР°РЅРёРµ СЌРєР·РµРјРїР»СЏСЂР° 'A' СЃС‚СЂСѓРєС‚СѓСЂС‹ 'Point'
 	A.x = 2;
 	A.y = 3;
 	cout << A.x << "\t" << A.y << endl;
@@ -94,5 +102,8 @@ void main()
 	A.print();
 	B.print();
 
-	cout << "Расстояние от точки 'A' до точки 'B': " << A.distance(B) << endl;
+	cout << "Р Р°СЃСЃС‚РѕСЏРЅРёРµ РѕС‚ С‚РѕС‡РєРё 'A' РґРѕ С‚РѕС‡РєРё 'B': " << A.distance(B) << endl;
+	cout << "Р Р°СЃСЃС‚РѕСЏРЅРёРµ РѕС‚ С‚РѕС‡РєРё 'B' РґРѕ С‚РѕС‡РєРё 'A': " << B.distance(A) << endl;
+	cout << "Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ С‚РѕС‡РєР°РјРё 'A' Рё 'B': " << distance(A, B) << endl;
+	cout << "Р Р°СЃСЃС‚РѕСЏРЅРёРµ РјРµР¶РґСѓ С‚РѕС‡РєР°РјРё 'B' Рё 'A': " << distance(B, A) << endl;
 }
