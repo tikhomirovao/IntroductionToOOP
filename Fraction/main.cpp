@@ -51,14 +51,23 @@ public:
 		set_denominator(1);
 		cout << "DefaultConstructor:\t" << this << endl;
 	}
-	explicit Fraction(double decimal)
+	explicit Fraction(int integer)
 	{
-		integer = (int)decimal;
-		decimal -= integer;
-		denominator = 100;
-		numerator = decimal * denominator;
+		this->integer = integer;
+		this->numerator = 0;
+		set_denominator(1);
+		cout << "SingleArgumentConstructor:" << this << endl;
+	}
+	Fraction(double decimal)
+	{
+		//decimal - десятичный
+		//decimal += 1e-10;
+		integer = decimal;		//сохраняем целую часть
+		decimal -= integer;		//убираем целую часть из десятичной дроби
+		denominator = 1e+9;		//записываем максимально возможный знаменатель
+		numerator = decimal * denominator + .5;
 		reduce();
-		cout << "SingleArgumentConstructor:\t" << this << endl;
+		cout << "DobleConstructor:\t" << this << endl;
 	}
 	Fraction(int numerator, int denominator)
 	{
@@ -87,11 +96,6 @@ public:
 	}
 
 	//				Operators:
-
-	/*operator double()
-	{
-
-	}*/
 	Fraction& operator=(const Fraction& other)
 	{
 		this->integer = other.integer;
@@ -245,20 +249,31 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 	char buffer[SIZE] = {};
 	//is >> buffer;
 	is.getline(buffer, SIZE);
+	/*
+	----------------------------
+	5
+	3/4
+	2 3/4
+	2(3/4)
+	----------------------------
+	*/
 
 	int numbers[3] = {};
 	int n = 0;
+	//https://legacy.cplusplus.com/reference/cstring/strtok/
 	const char delimiters[] = " /()";
 	for (char* pch = strtok(buffer, delimiters); pch; pch = strtok(NULL, delimiters))
-		numbers[n++] = atoi(pch);	//Функция atoi() принимает строку и возвращает целочисленный
-	//аналог этой строки, т.е. строку преобразует в число
+		//https://legacy.cplusplus.com/reference/cstdlib/atoi/
+		numbers[n++] = atoi(pch);	//Функция atoi() - 'ASCII to int' принимает строку, 
+	//и возвращает целочисленный аналог этой строки,
+	//т.е., строку преобразует в число.
 //for (int i = 0; i < n; i++)cout << numbers[i] << "\t"; cout << endl;
 
 	switch (n)
 	{
-	case 1:obj = Fraction(numbers[0]); break;
-	case 2:obj = Fraction(numbers[0], numbers[1]); break;
-	case 3:obj = Fraction(numbers[0], numbers[1], numbers[2]); break;
+	case 1: obj = Fraction(numbers[0]); break;
+	case 2: obj = Fraction(numbers[0], numbers[1]); break;
+	case 3: obj = Fraction(numbers[0], numbers[1], numbers[2]); break;
 	}
 
 	return is;
@@ -267,8 +282,8 @@ std::istream& operator>>(std::istream& is, Fraction& obj)
 
 //#define CONSTRUCTORS_CHECK
 //#define ARITHMETICAL_OPERATORS_CHECK
-//#define COMPARISON_OPERATORS
 //#define IOSTREAM_CHECK
+//#define TYPE_CONVERSIONS_BASICS
 //#define CONVERSIONS_FROM_OTHER_TO_CLASS
 #define CONVERSIONS_HOME_WORK
 
@@ -307,38 +322,47 @@ void main()
 	A.print();
 #endif // ARITHMETICAL_OPERATORS_CHECK
 
-#ifdef COMPARISON_OPERATORS
-
-	cout << (Fraction(1, 2) == Fraction(5, 10)) << endl;
-	//cout << (Fraction(1, 2) != Fraction(5, 10)) << endl;
-	//cout << (Fraction(1, 2) > Fraction(5, 10)) << endl;
-	//cout << (Fraction(1, 2) < Fraction(5, 10)) << endl;
-	//cout << (Fraction(1, 2) >= Fraction(5, 10)) << endl;
-	//cout << (Fraction(1, 2) <= Fraction(5, 10)) << endl;
-
-#endif // COMPARISON_OPERATORS
-
 #ifdef IOSTREAM_CHECK
+	//cout << (Fraction(1, 2) == Fraction(5, 10)) << endl;
+
 	Fraction A(3, 5);
 	cout << A << endl;
 
 	Fraction B;
-	cout << "Введите простую дробь: "; cin >> B;
+	cout << "Введите простую дробь: ";	cin >> B;
 	cout << B << endl;
-	cin >> B;
 #endif // IOSTREAM_CHECK
 
+#ifdef TYPE_CONVERSIONS_BASICS
+	//(type)value;	C-like notation
+//type(value);	Function notation
+
+	int a = 2;		//No conversions
+	double b = 3;	//Conversion from less to more
+	float c = 4;	//Conversion from less to more
+	int d = 3.f;	//Conversion from more to less without data loss
+	int e = 5.5;	//Conversion from more to less with data loss  
+#endif // TYPE_CONVERSIONS_BASICS
+
 #ifdef CONVERSIONS_FROM_OTHER_TO_CLASS
+	/*
+---------------------
+1. From other to Class;
+	-Single-Argument constructor;
+	-CopyAssignment;
+---------------------
+*/
+
 	Fraction A = (Fraction)5;	//Conversion from less to more (from 'int' to 'Fraction')
 	//Single-argument constructor
 	cout << A << endl;
 
 	cout << delimiter << endl;
 
-	Fraction B;	//Default constructor
+	Fraction B;		//Default constructor
 	cout << delimiter << endl;
-	B = Fraction(8);		//Conversion from less to more (from 'int' to 'Fraction')
-	//CopyAssignment
+	B = Fraction(8);			//Conversion from less to more (from 'int' to 'Fraction')
+	//CopyAssignment	
 	cout << delimiter << endl;
 	cout << B << endl;
 
@@ -346,8 +370,14 @@ void main()
 #endif // CONVERSIONS_FROM_OTHER_TO_CLASS
 
 #ifdef CONVERSIONS_HOME_WORK
-	Fraction A = (Fraction)2.75;
+	Fraction A = 3.333;
 	cout << A << endl;
 #endif // CONVERSIONS_HOME_WORK
 
+
+	/*
+	---------------------
+	2. From Class to other;
+	---------------------
+	*/
 }
